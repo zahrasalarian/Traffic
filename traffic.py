@@ -45,7 +45,22 @@ def main():
 
 
 def load_data(data_dir):
-    raise NotImplementedError
+    images = []
+    labels = []
+    os.chdir(r"{}".format(data_dir))
+    files = os.listdir()
+    # print(files)
+    for file in files:
+        os.chdir(r"{}".format(file))
+        fs = os.listdir()
+        for f in fs:
+            img = cv2.imread(f,0)
+            images.append(img)
+            labels.append(file)
+        # print(file)
+        os.chdir(r"..")
+    return (images,labels)
+    # raise NotImplementedError
 
 
 def get_model():
