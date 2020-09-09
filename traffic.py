@@ -54,10 +54,10 @@ def load_data(data_dir):
         os.chdir(r"{}".format(file))
         fs = os.listdir()
         for f in fs:
-            img = cv2.imread(f,0)
-            # np.reshape(img,(IMG_WIDTH,IMG_HEIGHT,3))
+            img = cv2.imread(f)
+            # np.reshape(img,(-1,IMG_HEIGHT,3))
             img  = cv2.resize(img, dsize=(IMG_WIDTH,IMG_HEIGHT), interpolation=cv2.INTER_CUBIC)
-            # print(img.shape)
+            print(img.shape)
             images.append(img)
             labels.append(file)
         # print(file)
@@ -78,7 +78,7 @@ def get_model():
     model = tf.keras.models.Sequential([
 
         tf.keras.layers.Conv2D(
-            32, (3, 3), activation="relu", input_shape=(28,28,1)
+            32, (3, 3), activation="relu", input_shape=(30,30,3)
         ),
 
         tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
