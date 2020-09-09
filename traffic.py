@@ -55,16 +55,49 @@ def load_data(data_dir):
         fs = os.listdir()
         for f in fs:
             img = cv2.imread(f,0)
+            # np.reshape(img,(IMG_WIDTH,IMG_HEIGHT,3))
+            img  = cv2.resize(img, dsize=(IMG_WIDTH,IMG_HEIGHT), interpolation=cv2.INTER_CUBIC)
+            # print(img.shape)
             images.append(img)
             labels.append(file)
         # print(file)
         os.chdir(r"..")
+    images = np.asarray(images)
+    labels = np.asarray(labels)
+
+    images = np.expand_dims(images,-1)
+    labels = np.expand_dims(labels,-1)
+    images = np.asarray(images).astype(np.float32)
+    labels = np.asarray(labels).astype(np.float32)
     return (images,labels)
     # raise NotImplementedError
 
 
 def get_model():
-    raise NotImplementedError
+    # Create a convolutional neural network
+    model = tf.keras.models.Sequential([
+
+        tf.keras.layers.Conv2D(
+            32, (3, 3), activation="relu", input_shape=(28,28,1)
+        ),
+
+        tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+
+        tf.keras.layers.Flatten(),
+
+        # Add hidden layer
+        tf.keras.layers.Dense(64, activation="relu"),
+        tf.keras.layers.Dropout(0.4),
+
+        # Add output layers with output units for all 43 categories
+        tf.keras.layers.Dense(43,activation="softmax")
+    ])
+    model.compile(
+    optimizer="adam",
+    loss="categorical_crossentropy",
+    metrics=["accuracy"])
+    return model
+    # raise NotImplementedError
 
 
 if __name__ == "__main__":
