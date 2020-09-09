@@ -54,17 +54,19 @@ def load_data(data_dir):
         os.chdir(r"{}".format(file))
         fs = os.listdir()
         for f in fs:
-            img = cv2.imread(f)
-            # np.reshape(img,(-1,IMG_HEIGHT,3))
-            img  = cv2.resize(img, dsize=(IMG_WIDTH,IMG_HEIGHT), interpolation=cv2.INTER_CUBIC)
-            print(img.shape)
-            images.append(img)
-            labels.append(file)
+            try:
+                img = cv2.imread(f)
+                img  = cv2.resize(img, dsize=(IMG_WIDTH,IMG_HEIGHT), interpolation=cv2.INTER_CUBIC)
+                # print(img.shape)
+                images.append(img)
+                labels.append(file)
+            except:
+                pass
         # print(file)
         os.chdir(r"..")
+    # print(len(images))
     images = np.asarray(images)
     labels = np.asarray(labels)
-
     return (images,labels)
     # raise NotImplementedError
 
@@ -82,8 +84,12 @@ def get_model():
         tf.keras.layers.Flatten(),
 
         # Add hidden layer
+        tf.keras.layers.Dense(256, activation="relu"),
+        tf.keras.layers.Dense(128, activation="relu"),
         tf.keras.layers.Dense(64, activation="relu"),
-        tf.keras.layers.Dropout(0.4),
+        tf.keras.layers.Dense(32, activation="relu"),
+
+        # tf.keras.layers.Dropout(0.4),
 
         # Add output layers with output units for all 43 categories
         tf.keras.layers.Dense(43,activation="softmax")
