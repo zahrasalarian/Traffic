@@ -65,10 +65,6 @@ def load_data(data_dir):
     images = np.asarray(images)
     labels = np.asarray(labels)
 
-    images = np.expand_dims(images,-1)
-    labels = np.expand_dims(labels,-1)
-    images = np.asarray(images).astype(np.float32)
-    labels = np.asarray(labels).astype(np.float32)
     return (images,labels)
     # raise NotImplementedError
 
